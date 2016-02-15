@@ -1,5 +1,4 @@
 import org.mockito.Mockito;
-import org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +20,7 @@ public class PlayerTest {
     }
 
 
-    public void testThrowBall(FrameValues[] testSet) throws Exception {
+    public void testThrowBall(FrameValuesForTest[] testSet) throws Exception {
         for (int i = 0; i < testSet.length; i++) {
             for (int j = 0; j < testSet[i].keggleCount.length; j++) {
                 boolean isLastThrow = i == testSet.length - 1 && j == testSet[i].keggleCount.length - 1;
@@ -30,7 +29,7 @@ public class PlayerTest {
         }
     }
 
-    private void testGetScoreInMoment(FrameValues[] testSet) {
+    private void testGetScoreInMoment(FrameValuesForTest[] testSet) {
         for (int i = 0; i < testSet.length; i++) {
             for (int j = 0; j < testSet[i].keggleCount.length; j++) {
                 player.throwBall(testSet[i].keggleCount[j]);
@@ -39,7 +38,7 @@ public class PlayerTest {
         }
     }
 
-    private void testGetScoreInThrows(FrameValues[] testSet) {
+    private void testGetScoreInThrows(FrameValuesForTest[] testSet) {
         int throwCount = 0;
         assertEqualsScoreInNThrows(testSet, throwCount);
         for (int frameIndex = 0; frameIndex < testSet.length; frameIndex++) {
@@ -51,7 +50,7 @@ public class PlayerTest {
         }
     }
 
-    private void assertEqualsScoreInNThrows(FrameValues[] testSet, int throwCount) {
+    private void assertEqualsScoreInNThrows(FrameValuesForTest[] testSet, int throwCount) {
         for (int i = 0; i < testSet.length; i++) {
             if (throwCount < testSet[i].scoreInNThrows.length) {
                 assertEquals(testSet[i].scoreInNThrows[throwCount], player.getScore(i));
@@ -60,7 +59,7 @@ public class PlayerTest {
     }
 
 
-    private void testGetFrameNumber(FrameValues[] testSet) {
+    private void testGetFrameNumber(FrameValuesForTest[] testSet) {
         for (int i = 0; i < testSet.length; i++) {
             for (int j = 0; j < testSet[i].keggleCount.length; j++) {
                 assertEquals(i, player.getFrameNumber());
@@ -69,7 +68,7 @@ public class PlayerTest {
         }
     }
 
-    private void testGameFinish(FrameValues[] testSet) {
+    private void testGameFinish(FrameValuesForTest[] testSet) {
         for (int i = 0; i < testSet.length; i++) {
             for (int j = 0; j < testSet[i].keggleCount.length; j++) {
                 assertEquals(false, player.gameFinished());
@@ -90,90 +89,90 @@ public class PlayerTest {
 
     @Test
     public void testThrowBall1() throws Exception {
-        testThrowBall(FrameValues.testSet1);
+        testThrowBall(FrameValuesForTest.testSet1);
     }
 
     @Test
     public void testThrowBall2() throws Exception {
-        testThrowBall(FrameValues.testSet2);
+        testThrowBall(FrameValuesForTest.testSet2);
     }
 
     @Test
     public void testThrowBall3() throws Exception {
-        testThrowBall(FrameValues.testSet3);
+        testThrowBall(FrameValuesForTest.testSet3);
     }
 
     @Test
     public void testGetScoreInMoment1() throws Exception {
-        testGetScoreInMoment(FrameValues.testSet1);
+        testGetScoreInMoment(FrameValuesForTest.testSet1);
     }
 
     @Test
     public void testGetScoreInMoment2() throws Exception {
-        testGetScoreInMoment(FrameValues.testSet2);
+        testGetScoreInMoment(FrameValuesForTest.testSet2);
     }
 
     @Test
     public void testGetScoreInMoment3() throws Exception {
-        testGetScoreInMoment(FrameValues.testSet3);
+        testGetScoreInMoment(FrameValuesForTest.testSet3);
     }
 
     @Test
     public void testGetScoreInThrows1() throws Exception {
-        testGetScoreInThrows(FrameValues.testSet1);
+        testGetScoreInThrows(FrameValuesForTest.testSet1);
     }
 
     @Test
     public void testGetScoreInThrows2() throws Exception {
-        testGetScoreInThrows(FrameValues.testSet2);
+        testGetScoreInThrows(FrameValuesForTest.testSet2);
     }
 
     @Test
     public void testGetScoreInThrows3() throws Exception {
-        testGetScoreInThrows(FrameValues.testSet3);
+        testGetScoreInThrows(FrameValuesForTest.testSet3);
     }
 
     @Test
     public void testGameFinish1() throws Exception {
-        testGameFinish(FrameValues.testSet1);
+        testGameFinish(FrameValuesForTest.testSet1);
     }
 
     @Test
     public void testGameFinish2() throws Exception {
-        testGameFinish(FrameValues.testSet2);
+        testGameFinish(FrameValuesForTest.testSet2);
     }
 
     @Test
     public void testGameFinish3() throws Exception {
-        testGameFinish(FrameValues.testSet3);
+        testGameFinish(FrameValuesForTest.testSet3);
     }
 
     @Test
     public void testGetFrameNumber1() throws Exception {
-        testGetFrameNumber(FrameValues.testSet1);
+        testGetFrameNumber(FrameValuesForTest.testSet1);
     }
 
     @Test
     public void testGetFrameNumber2() throws Exception {
-        testGetFrameNumber(FrameValues.testSet2);
+        testGetFrameNumber(FrameValuesForTest.testSet2);
     }
 
     @Test
     public void testGetFrameNumber3() throws Exception {
-        testGetFrameNumber(FrameValues.testSet3);
+        testGetFrameNumber(FrameValuesForTest.testSet3);
     }
 
     ///
 
     @Test
     public void testGetScoreAllStrike() {
-        testGetScoreInMoment(FrameValues.testSetMax);
-        testGetScoreInThrows(FrameValues.testSetMax);
+        testGetScoreInMoment(FrameValuesForTest.testSetMax);
+        testGetScoreInThrows(FrameValuesForTest.testSetMax);
     }
 
     @Test
     public void testGetScoreAllZero() {
-        testGetScoreInMoment(FrameValues.testSetZeros);
-        testGetScoreInThrows(FrameValues.testSetZeros);
+        testGetScoreInMoment(FrameValuesForTest.testSetZeros);
+        testGetScoreInThrows(FrameValuesForTest.testSetZeros);
     }
 }
