@@ -1,25 +1,31 @@
+import org.mockito.Mockito;
+import org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by mhty on 09.02.16.
  */
 public class PlayerTest {
     Player player;
+    Userable user;
 
 
     @Before
     public void playerCreate() {
-        player = new Player();
+        user = Mockito.mock(Userable.class);
+        player = new Player(user);
     }
 
 
     public void testThrowBall(FrameValues[] testSet) throws Exception {
         for (int i = 0; i < testSet.length; i++) {
             for (int j = 0; j < testSet[i].keggleCount.length; j++) {
-                assertEquals(i == testSet.length - 1 && j == testSet[i].keggleCount.length - 1, !player.throwBall(testSet[i].keggleCount[j]));
+                boolean isLastThrow = i == testSet.length - 1 && j == testSet[i].keggleCount.length - 1;
+                assertEquals(!isLastThrow, player.throwBall(testSet[i].keggleCount[j]));
             }
         }
     }
@@ -34,17 +40,21 @@ public class PlayerTest {
     }
 
     private void testGetScoreInThrows(FrameValues[] testSet) {
+        int throwCount = 0;
+        assertEqualsScoreInNThrows(testSet, throwCount);
         for (int frameIndex = 0; frameIndex < testSet.length; frameIndex++) {
             for (int throwIndex = 0; throwIndex < testSet[frameIndex].keggleCount.length; throwIndex++) {
                 player.throwBall(testSet[frameIndex].keggleCount[throwIndex]);
-                assertEquals(testSet[frameIndex].scoreInMoment[throwIndex], player.getScore(frameIndex));
+                throwCount++;
+                assertEqualsScoreInNThrows(testSet, throwCount);
+            }
+        }
+    }
 
-                for (int i = 0; i < frameIndex - 1; i++) {
-                    assertEquals(testSet[i].getScoreInNThrows(2), player.getScore(i));
-                }
-                if(frameIndex > 0) {
-                    assertEquals(testSet[frameIndex - 1].getScoreInNThrows(1 + throwIndex), player.getScore(frameIndex - 1));
-                }
+    private void assertEqualsScoreInNThrows(FrameValues[] testSet, int throwCount) {
+        for (int i = 0; i < testSet.length; i++) {
+            if (throwCount < testSet[i].scoreInNThrows.length) {
+                assertEquals(testSet[i].scoreInNThrows[throwCount], player.getScore(i));
             }
         }
     }
@@ -67,6 +77,15 @@ public class PlayerTest {
             }
         }
         assertEquals(true, player.gameFinished());
+    }
+
+    @Test
+    public void testGetName() {
+        when(user.getName()).thenReturn("User 314");
+        assertEquals("User 314", player.getName());
+
+        when(user.getName()).thenReturn("Dima");
+        assertEquals("Dima", player.getName());
     }
 
     @Test
@@ -129,8 +148,6 @@ public class PlayerTest {
         testGameFinish(FrameValues.testSet3);
     }
 
-
-
     @Test
     public void testGetFrameNumber1() throws Exception {
         testGetFrameNumber(FrameValues.testSet1);
@@ -144,5 +161,19 @@ public class PlayerTest {
     @Test
     public void testGetFrameNumber3() throws Exception {
         testGetFrameNumber(FrameValues.testSet3);
+    }
+
+    ///
+
+    @Test
+    public void testGetScoreAllStrike() {
+        testGetScoreInMoment(FrameValues.testSetMax);
+        testGetScoreInThrows(FrameValues.testSetMax);
+    }
+
+    @Test
+    public void testGetScoreAllZero() {
+        testGetScoreInMoment(FrameValues.testSetZeros);
+        testGetScoreInThrows(FrameValues.testSetZeros);
     }
 }

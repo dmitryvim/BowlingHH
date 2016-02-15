@@ -5,20 +5,18 @@ import java.util.Scanner;
  * Created by mhty on 09.02.16.
  */
 public class Player {
-    final int FRAMES_COUNT = 10;
+    final public static int FRAMES_COUNT = 10;
 
     private ArrayList<Frame> frames;
     private Integer frameNumber;
+    private Userable user;
 
-
-
-    public Player() {
+    public Player(Userable user) {
+        this.user = user;
         frames = new ArrayList<>(FRAMES_COUNT);
         frameNumber = 0;
         frames.add(new Frame());
     }
-
-
 
     public boolean throwBall(int keggleCount) {
         if (!gameFinished()) {
@@ -83,17 +81,11 @@ public class Player {
         return stringBuffer.toString();
     }
 
-
-
-    public static void main(String[] args) {
-        Player player = new Player();
-        Scanner scan = new Scanner(System.in);
-
-        while (!player.gameFinished()) {
-            player.throwBall(scan.nextInt());
-            System.out.print(player);
-
-        }
+    public String getName() {
+        return user.getName();
     }
 
+    public void finishGame(int place) {
+        user.setGameResult(getScore(), place);
+    }
 }

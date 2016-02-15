@@ -71,8 +71,6 @@ public class Frame {
 
     @Override
     public String toString() {
-
-
         if (isStrike()) {
             return "  X|";
         }

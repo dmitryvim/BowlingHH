@@ -8,11 +8,13 @@ import static org.junit.Assert.*;
  * Created by mhty on 10.02.16.
  */
 public class FrameTest {
+    Frame frame;
+
 
     @Test
     public void testIsClosed() throws Exception {
 
-        Frame frame = new Frame();
+        frame = new Frame();
         frame.throwBall(2);
         assertEquals(false, frame.isClosed());
         frame.throwBall(8);
@@ -55,7 +57,7 @@ public class FrameTest {
 
     @Test
     public void testIsStrike() throws Exception {
-        Frame frame = new Frame();
+        frame = new Frame();
         frame.throwBall(10);
         assertEquals(true, frame.isStrike());
 
@@ -84,7 +86,7 @@ public class FrameTest {
 
     @Test
     public void testIsSpare() throws Exception {
-        Frame frame = new Frame();
+        frame = new Frame();
         frame.throwBall(10);
         assertEquals(false, frame.isSpare());
 
@@ -113,7 +115,7 @@ public class FrameTest {
 
     @Test
     public void testSize() throws Exception {
-        Frame frame = new Frame();
+        frame = new Frame();
         assertEquals(0, frame.size());
 
         frame.throwBall(10);
@@ -144,7 +146,7 @@ public class FrameTest {
 
     @Test
     public void testThrowBall() throws Exception {
-        Frame frame = new Frame();
+        frame = new Frame();
         assertEquals(true, frame.throwBall(2));
         assertEquals(true, frame.throwBall(2));
         assertEquals(false, frame.throwBall(2));
@@ -177,7 +179,7 @@ public class FrameTest {
 
     @Test
     public void testKeggleCount() throws Exception {
-        Frame frame = new Frame();
+        frame = new Frame();
         assertEquals(0, frame.keggleCount());
 
         frame.throwBall(10);
@@ -208,7 +210,7 @@ public class FrameTest {
 
     @Test
     public void testPoints() throws Exception {
-        Frame frame = new Frame();
+        frame = new Frame();
         assertEquals(11, frame.points(11, 0, 0));
         assertEquals(11, frame.points(11, 5, 0));
         assertEquals(11, frame.points(11, 0, 5));
@@ -285,7 +287,55 @@ public class FrameTest {
         assertEquals(128, frame.points(98, 5, 0));
         assertEquals(128, frame.points(98, 0, 5));
         assertEquals(128, frame.points(98, 9, 5));
+    }
 
+    @Test
+    public void testToString() {
+        frame = new Frame();
+        frame.throwBall(10);
+        assertEquals("  X|", frame.toString());
+
+        frame = new Frame();
+        frame.throwBall(2);
+        assertEquals("2 ", frame.toString());
+        frame.throwBall(8);
+        assertEquals("2 /|", frame.toString());
+
+        frame = new Frame();
+        frame.throwBall(2);
+        assertEquals("2 ", frame.toString());
+        frame.throwBall(5);
+        assertEquals("2 5|", frame.toString());
+
+        frame = new Frame(true);
+        frame.throwBall(10);
+        assertEquals("X ", frame.toString());
+        frame.throwBall(10);
+        assertEquals("X X ", frame.toString());
+        frame.throwBall(10);
+        assertEquals("X X X ", frame.toString());
+
+        frame = new Frame(true);
+        frame.throwBall(4);
+        assertEquals("4 ", frame.toString());
+        frame.throwBall(6);
+        assertEquals("4 / ", frame.toString());
+        frame.throwBall(10);
+        assertEquals("4 / X ", frame.toString());
+
+        frame = new Frame(true);
+        frame.throwBall(10);
+        assertEquals("X ", frame.toString());
+        frame.throwBall(6);
+        assertEquals("X 6 ", frame.toString());
+        frame.throwBall(1);
+        assertEquals("X 6 1 ", frame.toString());
+
+        frame = new Frame(true);
+        frame.throwBall(1);
+        assertEquals("1 ", frame.toString());
+        frame.throwBall(6);
+        assertEquals("1 6 ", frame.toString());
     }
 
 }
