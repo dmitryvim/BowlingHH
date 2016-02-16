@@ -1,9 +1,6 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 
-/**
- * Created by mhty on 10.02.16.
- */
 public class Frame {
     final public static int KEGGLE_COUNT = 10;
     final public static int THROWS_IN_FRAME = 2;
@@ -12,12 +9,12 @@ public class Frame {
     LinkedList<Integer> ballTrows;
     boolean isTenthFrame;
 
-    private Frame(boolean isTenthFrame) {
+    public Frame(boolean isTenthFrame) {
         this.isTenthFrame = isTenthFrame;
         ballTrows = new LinkedList<>();
     }
 
-    private Frame() {
+    public Frame() {
         this.isTenthFrame = false;
         ballTrows = new LinkedList<>();
     }
@@ -88,7 +85,7 @@ public class Frame {
             int count = (Integer) iterator.next();
             sum += count;
             if (sum < 10) {
-                stringBuffer.append(count + " ");
+                stringBuffer.append(String.format("%d ", count));
             } else if (count == 10) {
                 stringBuffer.append("X ");
                 sum = 0;
