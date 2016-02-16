@@ -12,12 +12,12 @@ public class Frame {
     LinkedList<Integer> ballTrows;
     boolean isTenthFrame;
 
-    Frame(boolean isTenthFrame) {
+    private Frame(boolean isTenthFrame) {
         this.isTenthFrame = isTenthFrame;
         ballTrows = new LinkedList<>();
     }
 
-    Frame() {
+    private Frame() {
         this.isTenthFrame = false;
         ballTrows = new LinkedList<>();
     }

@@ -73,7 +73,7 @@ public class Player {
         stringBuffer.append("\n");
 
         for (int frameIndex = 0; frameIndex <= frameNumber; frameIndex++) {
-            stringBuffer.append((getScore(frameIndex) + "    ").substring(0, 4));
+            stringBuffer.append(String.format("%4d", getScore(frameIndex)));
         }
 
         stringBuffer.append("\n Количество фреймов: " +  (frameNumber + 1) +
