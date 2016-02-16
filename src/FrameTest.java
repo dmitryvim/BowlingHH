@@ -4,9 +4,6 @@ import org.omg.CORBA.FREE_MEM;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by mhty on 10.02.16.
- */
 public class FrameTest {
     Frame frame;
 
@@ -14,23 +11,23 @@ public class FrameTest {
     @Test
     public void testIsClosed() throws Exception {
 
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(2);
         assertEquals(false, frame.isClosed());
         frame.throwBall(8);
         assertEquals(true, frame.isClosed());
 
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(10);
         assertEquals(true, frame.isClosed());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(7);
         assertEquals(false, frame.isClosed());
         frame.throwBall(2);
         assertEquals(true, frame.isClosed());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(7);
         assertEquals(false, frame.isClosed());
         frame.throwBall(3);
@@ -38,7 +35,7 @@ public class FrameTest {
         frame.throwBall(5);
         assertEquals(true, frame.isClosed());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals(false, frame.isClosed());
         frame.throwBall(3);
@@ -46,7 +43,7 @@ public class FrameTest {
         frame.throwBall(5);
         assertEquals(true, frame.isClosed());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals(false, frame.isClosed());
         frame.throwBall(10);
@@ -57,17 +54,17 @@ public class FrameTest {
 
     @Test
     public void testIsStrike() throws Exception {
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(10);
         assertEquals(true, frame.isStrike());
 
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(8);
         assertEquals(false, frame.isStrike());
         frame.throwBall(2);
         assertEquals(false, frame.isStrike());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals(false, frame.isStrike());
         frame.throwBall(10);
@@ -75,7 +72,7 @@ public class FrameTest {
         frame.throwBall(10);
         assertEquals(false, frame.isStrike());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(8);
         assertEquals(false, frame.isStrike());
         frame.throwBall(2);
@@ -86,17 +83,17 @@ public class FrameTest {
 
     @Test
     public void testIsSpare() throws Exception {
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(10);
         assertEquals(false, frame.isSpare());
 
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(8);
         assertEquals(false, frame.isSpare());
         frame.throwBall(2);
         assertEquals(true, frame.isSpare());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals(false, frame.isSpare());
         frame.throwBall(10);
@@ -104,7 +101,7 @@ public class FrameTest {
         frame.throwBall(10);
         assertEquals(false, frame.isSpare());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(8);
         assertEquals(false, frame.isSpare());
         frame.throwBall(2);
@@ -115,19 +112,19 @@ public class FrameTest {
 
     @Test
     public void testSize() throws Exception {
-        frame = new Frame();
+        frame = Frame.build();
         assertEquals(0, frame.size());
 
         frame.throwBall(10);
         assertEquals(1, frame.size());
 
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(8);
         assertEquals(1, frame.size());
         frame.throwBall(2);
         assertEquals(2, frame.size());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals(1, frame.size());
         frame.throwBall(10);
@@ -135,7 +132,7 @@ public class FrameTest {
         frame.throwBall(10);
         assertEquals(3, frame.size());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(8);
         assertEquals(1, frame.size());
         frame.throwBall(2);
@@ -144,54 +141,23 @@ public class FrameTest {
         assertEquals(3, frame.size());
     }
 
-    @Test
-    public void testThrowBall() throws Exception {
-        frame = new Frame();
-        assertEquals(true, frame.throwBall(2));
-        assertEquals(true, frame.throwBall(2));
-        assertEquals(false, frame.throwBall(2));
-        assertEquals(false, frame.throwBall(2));
 
-        frame = new Frame();
-        assertEquals(true, frame.throwBall(10));
-        assertEquals(false, frame.throwBall(10));
-        assertEquals(false, frame.throwBall(2));
-        assertEquals(false, frame.throwBall(2));
-
-        frame = new Frame(true);
-        assertEquals(true, frame.throwBall(2));
-        assertEquals(true, frame.throwBall(2));
-        assertEquals(false, frame.throwBall(2));
-        assertEquals(false, frame.throwBall(2));
-
-        frame = new Frame(true);
-        assertEquals(true, frame.throwBall(2));
-        assertEquals(true, frame.throwBall(8));
-        assertEquals(true, frame.throwBall(2));
-        assertEquals(false, frame.throwBall(2));
-
-        frame = new Frame(true);
-        assertEquals(true, frame.throwBall(10));
-        assertEquals(true, frame.throwBall(2));
-        assertEquals(true, frame.throwBall(2));
-        assertEquals(false, frame.throwBall(2));
-    }
 
     @Test
     public void testKeggleCount() throws Exception {
-        frame = new Frame();
+        frame = Frame.build();
         assertEquals(0, frame.keggleCount());
 
         frame.throwBall(10);
         assertEquals(10, frame.keggleCount());
 
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(8);
         assertEquals(8, frame.keggleCount());
         frame.throwBall(2);
         assertEquals(10, frame.keggleCount());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals(10, frame.keggleCount());
         frame.throwBall(10);
@@ -199,7 +165,7 @@ public class FrameTest {
         frame.throwBall(10);
         assertEquals(30, frame.keggleCount());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(8);
         assertEquals(8, frame.keggleCount());
         frame.throwBall(2);
@@ -208,106 +174,120 @@ public class FrameTest {
         assertEquals(20, frame.keggleCount());
     }
 
+
     @Test
-    public void testPoints() throws Exception {
-        frame = new Frame();
-        assertEquals(11, frame.points(11, 0, 0));
-        assertEquals(11, frame.points(11, 5, 0));
-        assertEquals(11, frame.points(11, 0, 5));
-        assertEquals(11, frame.points(11, 9, 5));
+    public void testGetPoints() {
+        Frame nextFrame;
+        Frame nextNextFrame;
 
+        frame = Frame.build();
+        frame.throwBall(2);
+        assertEquals(2, frame.getPoints());
+        frame.throwBall(5);
+        assertEquals(7, frame.getPoints());
+        nextFrame = Frame.build();
+        frame.setNextFrame(nextFrame);
+        assertEquals(7, frame.getPoints());
+        nextFrame.throwBall(5);
+        assertEquals(7, frame.getPoints());
+
+        frame = Frame.build();
         frame.throwBall(3);
-        assertEquals(11, frame.points(8, 0, 0));
-        assertEquals(11, frame.points(8, 5, 0));
-        assertEquals(11, frame.points(8, 0, 5));
-        assertEquals(11, frame.points(8, 9, 5));
-        frame.throwBall(4);
-        assertEquals(15, frame.points(8, 0, 0));
-        assertEquals(15, frame.points(8, 5, 0));
-        assertEquals(15, frame.points(8, 0, 5));
-        assertEquals(15, frame.points(8, 9, 5));
+        assertEquals(3, frame.getPoints());
+        frame.throwBall(7);
+        assertEquals(10, frame.getPoints());
+        nextFrame = Frame.build();
+        frame.setNextFrame(nextFrame);
+        assertEquals(10, frame.getPoints());
+        nextFrame.throwBall(5);
+        assertEquals(15, frame.getPoints());
+        nextFrame.throwBall(5);
+        assertEquals(15, frame.getPoints());
+        nextNextFrame = Frame.build();
+        nextFrame.setNextFrame(nextNextFrame);
+        nextNextFrame.throwBall(10);
+        assertEquals(15, frame.getPoints());
 
-        frame = new Frame();
+        frame = Frame.build();
+        frame.throwBall(10);
+        assertEquals(10, frame.getPoints());
+        nextFrame = Frame.build();
+        frame.setNextFrame(nextFrame);
+        assertEquals(10, frame.getPoints());
+        nextFrame.throwBall(5);
+        assertEquals(15, frame.getPoints());
+        nextFrame.throwBall(5);
+        assertEquals(20, frame.getPoints());
+        nextNextFrame = Frame.build();
+        nextFrame.setNextFrame(nextNextFrame);
+        nextNextFrame.throwBall(10);
+        assertEquals(20, frame.getPoints());
+
+        frame = Frame.build();
+        frame.throwBall(10);
+        assertEquals(10, frame.getPoints());
+        nextFrame = Frame.build();
+        frame.setNextFrame(nextFrame);
+        assertEquals(10, frame.getPoints());
+        nextFrame.throwBall(10);
+        assertEquals(20, frame.getPoints());
+        nextNextFrame = Frame.build();
+        nextFrame.setNextFrame(nextNextFrame);
+        nextNextFrame.throwBall(7);
+        assertEquals(27, frame.getPoints());
+
+        frame = Frame.build();
+        frame.throwBall(10);
+        assertEquals(10, frame.getPoints());
+        nextFrame = Frame.build();
+        frame.setNextFrame(nextFrame);
+        assertEquals(10, frame.getPoints());
+        nextFrame.throwBall(10);
+        assertEquals(20, frame.getPoints());
+        nextNextFrame = Frame.build();
+        nextFrame.setNextFrame(nextNextFrame);
+        nextNextFrame.throwBall(10);
+        assertEquals(30, frame.getPoints());
+        assertEquals(20, nextFrame.getPoints());
+        assertEquals(10, nextNextFrame.getPoints());
+
+        frame = Frame.buildLastFrame();
+        frame.throwBall(4);
+        assertEquals(4, frame.getPoints());
         frame.throwBall(6);
-        assertEquals(14, frame.points(8, 0, 0));
-        assertEquals(14, frame.points(8, 5, 0));
-        assertEquals(14, frame.points(8, 0, 5));
-        assertEquals(14, frame.points(8, 9, 5));
-        frame.throwBall(4);
-        assertEquals(13, frame.points(3, 0, 0));
-        assertEquals(19, frame.points(4, 5, 0));
-        assertEquals(16, frame.points(6, 0, 5));
-        assertEquals(26, frame.points(7, 9, 5));
-
-        frame = new Frame();
+        assertEquals(10, frame.getPoints());
         frame.throwBall(10);
-        assertEquals(11, frame.points(1, 0, 0));
-        assertEquals(15, frame.points(2, 3, 0));
-        assertEquals(19, frame.points(5, 0, 4));
-        assertEquals(32, frame.points(9, 6, 7));
+        assertEquals(20, frame.getPoints());
 
-        frame = new Frame(true);
-        frame.throwBall(2);
-        assertEquals(10, frame.points(8, 0, 0));
-        assertEquals(10, frame.points(8, 5, 0));
-        assertEquals(10, frame.points(8, 0, 5));
-        assertEquals(10, frame.points(8, 9, 5));
-        frame.throwBall(2);
-        assertEquals(12, frame.points(8, 0, 0));
-        assertEquals(12, frame.points(8, 5, 0));
-        assertEquals(12, frame.points(8, 0, 5));
-        assertEquals(12, frame.points(8, 9, 5));
-
-        frame = new Frame(true);
-        frame.throwBall(2);
-        frame.throwBall(8);
-        assertEquals(18, frame.points(8, 0, 0));
-        assertEquals(18, frame.points(8, 5, 0));
-        assertEquals(18, frame.points(8, 0, 5));
-        assertEquals(18, frame.points(8, 9, 5));
-        frame.throwBall(2);
-        assertEquals(20, frame.points(8, 0, 0));
-        assertEquals(20, frame.points(8, 5, 0));
-        assertEquals(20, frame.points(8, 0, 5));
-        assertEquals(20, frame.points(8, 9, 5));
-
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
-        assertEquals(108, frame.points(98, 0, 0));
-        assertEquals(108, frame.points(98, 5, 0));
-        assertEquals(108, frame.points(98, 0, 5));
-        assertEquals(108, frame.points(98, 9, 5));
-        frame.throwBall(10);
-        assertEquals(118, frame.points(98, 0, 0));
-        assertEquals(118, frame.points(98, 5, 0));
-        assertEquals(118, frame.points(98, 0, 5));
-        assertEquals(118, frame.points(98, 9, 5));
-        frame.throwBall(10);
-        assertEquals(128, frame.points(98, 0, 0));
-        assertEquals(128, frame.points(98, 5, 0));
-        assertEquals(128, frame.points(98, 0, 5));
-        assertEquals(128, frame.points(98, 9, 5));
+        assertEquals(10, frame.getPoints());
+        frame.throwBall(6);
+        assertEquals(16, frame.getPoints());
+        frame.throwBall(3);
+        assertEquals(19, frame.getPoints());
     }
+
 
     @Test
     public void testToString() {
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(10);
         assertEquals("  X|", frame.toString());
 
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(2);
         assertEquals("2 ", frame.toString());
         frame.throwBall(8);
         assertEquals("2 /|", frame.toString());
 
-        frame = new Frame();
+        frame = Frame.build();
         frame.throwBall(2);
         assertEquals("2 ", frame.toString());
         frame.throwBall(5);
         assertEquals("2 5|", frame.toString());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals("X ", frame.toString());
         frame.throwBall(10);
@@ -315,7 +295,7 @@ public class FrameTest {
         frame.throwBall(10);
         assertEquals("X X X ", frame.toString());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(4);
         assertEquals("4 ", frame.toString());
         frame.throwBall(6);
@@ -323,7 +303,7 @@ public class FrameTest {
         frame.throwBall(10);
         assertEquals("4 / X ", frame.toString());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals("X ", frame.toString());
         frame.throwBall(6);
@@ -331,7 +311,7 @@ public class FrameTest {
         frame.throwBall(1);
         assertEquals("X 6 1 ", frame.toString());
 
-        frame = new Frame(true);
+        frame = Frame.buildLastFrame();
         frame.throwBall(1);
         assertEquals("1 ", frame.toString());
         frame.throwBall(6);

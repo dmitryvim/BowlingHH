@@ -1,56 +1,61 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
-/**
- * Created by mhty on 09.02.16.
- */
 public class Player {
     final public static int FRAMES_COUNT = 10;
+    final private static String DEFAULT_USER_NAME = "user";
 
     private ArrayList<Frame> frames;
-    private Integer frameNumber;
+    private Integer activeFrameIndex;
     private Userable user;
 
-    public Player(Userable user) {
+    private Player(Userable user) {
         this.user = user;
         frames = new ArrayList<>(FRAMES_COUNT);
-        frameNumber = 0;
-        frames.add(new Frame());
+        activeFrameIndex = -1;
+        addFrame();
     }
 
-    public boolean throwBall(int keggleCount) {
-        if (!gameFinished()) {
-            if (getActiveFrame().isClosed() && frameNumber < FRAMES_COUNT - 1) {
-                frameNumber++;
-                frames.add(new Frame(frameNumber == FRAMES_COUNT - 1));
-            }
-            getActiveFrame().throwBall(keggleCount);
+    public static Player build(Userable user) {
+        return new Player(user);
+    }
+
+    public static Player build() {
+        return build(null);
+    }
+
+    public void throwBall(int keggleCount) {
+        if (gameFinished()) {
+            throw new RuntimeException("Game was finished!\n");
         }
-        return !gameFinished();
+        if (getActiveFrame().isClosed()) {
+            addFrame();
+        }
+        getActiveFrame().throwBall(keggleCount);
+    }
+
+    private void addFrame() {
+
+        activeFrameIndex++;
+        frames.add(activeFrameIndex == FRAMES_COUNT - 1 ? Frame.buildLastFrame() : Frame.build());
+        if (activeFrameIndex > 0) {
+            frames.get(activeFrameIndex - 1).setNextFrame(getActiveFrame());
+        }
+
+
     }
 
     private Frame getActiveFrame() {
-        return frames.get(frameNumber);
+        return frames.get(activeFrameIndex);
     }
 
     public int getScore() {
-        return getScore(frameNumber);
+        return getScore(activeFrameIndex);
     }
 
     public int getScore(int frameNumber) {
         int score = 0;
         for (int frameIndex = 0; frameIndex <= frameNumber && frameIndex < frames.size(); frameIndex++) {
-            int nextThrow = 0;
-            int nextNextThrow = 0;
-            if (frameIndex + 1 < frames.size() && frames.get(frameIndex + 1).size() > 0) {
-                nextThrow = frames.get(frameIndex + 1).ballTrows.getFirst();
-                if (frames.get(frameIndex + 1).size() > 1) {
-                    nextNextThrow = frames.get(frameIndex + 1).ballTrows.get(1);
-                } else if (frameIndex + 2 < frames.size() && frames.get(frameIndex + 2).size() > 0) {
-                    nextNextThrow = frames.get(frameIndex + 2).ballTrows.getFirst();
-                }
-            }
-            score = frames.get(frameIndex).points(score, nextThrow, nextNextThrow);
+            score += frames.get(frameIndex).getPoints();
         }
         return score;
     }
@@ -60,25 +65,26 @@ public class Player {
     }
 
     public int getFrameNumber() {
-        return frameNumber + (getActiveFrame().isClosed() ? 1 : 0);
+        return activeFrameIndex + (getActiveFrame().isClosed() ? 1 : 0);
     }
 
     @Override
     public String toString() {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuilder = new StringBuilder();
 
-        for (int frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
-            stringBuffer.append(frames.get(frameIndex));
+        for (Frame frame : frames) {
+            stringBuilder.append(frame);
         }
-        stringBuffer.append("\n");
+        stringBuilder.append("\n");
 
-        for (int frameIndex = 0; frameIndex <= frameNumber; frameIndex++) {
-            stringBuffer.append(String.format("%4d", getScore(frameIndex)));
+        for (int frameIndex = 0; frameIndex <= activeFrameIndex; frameIndex++) {
+            stringBuilder.append(String.format("%3d|", getScore(frameIndex)));
         }
+        stringBuilder.append("\n");
 
-        stringBuffer.append("\n Количество фреймов: " +  (frameNumber + 1) +
-                            "\n Количество очков: " +  getScore() + "\n\n");
-        return stringBuffer.toString();
+        stringBuilder.append("\n Количество фреймов: " + (activeFrameIndex + 1) +
+                "\n Количество очков: " + getScore() + "\n\n");
+        return stringBuilder.toString();
     }
 
     public String getName() {
@@ -88,4 +94,19 @@ public class Player {
     public void finishGame(int place) {
         user.setGameResult(getScore(), place);
     }
+
+    public static void main(String[] args) {
+        FrameValuesForTest[] testSet = FrameValuesForTest.testSetMax;
+        Player player = Player.build();
+
+        System.out.println(player);
+        for (FrameValuesForTest aTestSet : testSet) {
+            for (int j = 0; j < aTestSet.keggleCount.length; j++) {
+                player.throwBall(aTestSet.keggleCount[j]);
+                System.out.println(player);
+            }
+        }
+        System.out.println(player);
+    }
+
 }
