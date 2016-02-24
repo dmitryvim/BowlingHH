@@ -7,26 +7,48 @@ import static org.junit.Assert.*;
 public class FrameTest {
     Frame frame;
 
+    @Test
+    public void testThrowBall() {
+        frame = Frame.build();
+        assertEquals(frame, frame.throwBall(1));
+    }
 
     @Test
-    public void testIsClosed() throws Exception {
+    public void testIsClosedLess10() {
+        frame = Frame.buildLastFrame();
+        frame.throwBall(7);
+        assertEquals(false, frame.isClosed());
+        frame.throwBall(2);
+        assertEquals(true, frame.isClosed());
+    }
 
+    @Test
+    public void testIsClosedSpare() {
         frame = Frame.build();
         frame.throwBall(2);
         assertEquals(false, frame.isClosed());
         frame.throwBall(8);
         assertEquals(true, frame.isClosed());
+    }
 
+    @Test
+    public void testIsClosedStrike() {
         frame = Frame.build();
         frame.throwBall(10);
         assertEquals(true, frame.isClosed());
+    }
 
+    @Test
+    public void testIsClosedLastFrameLess10() {
         frame = Frame.buildLastFrame();
         frame.throwBall(7);
         assertEquals(false, frame.isClosed());
         frame.throwBall(2);
         assertEquals(true, frame.isClosed());
+    }
 
+    @Test
+    public void testIsClosedLastFrameSpareOneMoreThrow() {
         frame = Frame.buildLastFrame();
         frame.throwBall(7);
         assertEquals(false, frame.isClosed());
@@ -34,7 +56,10 @@ public class FrameTest {
         assertEquals(false, frame.isClosed());
         frame.throwBall(5);
         assertEquals(true, frame.isClosed());
+    }
 
+    @Test
+    public void testIsClosedLastFrameStrikeTwoMoreThrow() {
         frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals(false, frame.isClosed());
@@ -42,7 +67,12 @@ public class FrameTest {
         assertEquals(false, frame.isClosed());
         frame.throwBall(5);
         assertEquals(true, frame.isClosed());
+    }
 
+
+
+    @Test
+    public void testIsClosedLastFrameThreeStrike() throws Exception {
         frame = Frame.buildLastFrame();
         frame.throwBall(10);
         assertEquals(false, frame.isClosed());

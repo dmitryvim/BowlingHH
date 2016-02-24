@@ -10,12 +10,15 @@ public class Frame {
     final public static char SPARE_CHAR = '/';
     final public static char FRAME_DELIMITER_CHAR = '|';
 
-    LinkedList<Integer> ballTrows;
-    boolean isLastFrame = false;
-    Frame nextFrame = null;
+    //private LinkedList<Integer> ____ballThrows;
+    private int[] ballThrows;
+    private int throwsCount;
+    private  boolean isLastFrame = false;
+    private Frame nextFrame = null;
 
     private Frame() {
-        ballTrows = new LinkedList<>();
+        ballThrows = new int[3];
+        throwsCount = 0;
     }
 
     public static Frame build() {
@@ -36,29 +39,35 @@ public class Frame {
     }
 
     public boolean isStrike() {
-        return (!isLastFrame && size() == 1 && ballTrows.getFirst() == KEGGLE_COUNT);
+        return (!isLastFrame && size() == 1 && ballThrows[0] == KEGGLE_COUNT);
     }
 
     public boolean isSpare() {
-        return (!isLastFrame && size() == THROWS_IN_FRAME && ballTrows.getFirst() + ballTrows.getLast() == KEGGLE_COUNT);
+        return (!isLastFrame && size() == THROWS_IN_FRAME && ballThrows[0] + ballThrows[1] == KEGGLE_COUNT);
     }
 
     public int size() {
-        return ballTrows.size();
+        return throwsCount;
     }
 
-    public void throwBall(int keggleCount) {
+    public Frame throwBall(int keggleCount) {
         if (isClosed()) {
             throw new RuntimeException("Frame was closed.\n");
         }
-        ballTrows.add(keggleCount);
+
+        addThrow(keggleCount);
+        return this;
+    }
+
+    private void addThrow(int keggleCount) {
+        ballThrows[throwsCount] = keggleCount;
+        throwsCount++;
     }
 
     public int keggleCount() {
-        Iterator iterator = ballTrows.iterator();
         int sum = 0;
-        while(iterator.hasNext()) {
-            sum += (Integer) iterator.next();
+        for (int i = 0; i < size(); i++) {
+            sum += ballThrows[i];
         }
         return sum;
     }
@@ -89,14 +98,14 @@ public class Frame {
             }
         } else {
             for (int throwIndex = 0; throwIndex < size() && throwIndex < 2; throwIndex++) {
-                result += ballTrows.get(throwIndex);
+                result += ballThrows[throwIndex];
             }
         }
         return result;
     }
 
     int getOneThrowKeggleCount() {
-        return (size() > 0) ? ballTrows.getFirst() : 0;
+        return (size() > 0) ? ballThrows[0] : 0;
     }
 
     private static String getStrikeString() {
@@ -104,17 +113,17 @@ public class Frame {
     }
 
     private String getSpareString() {
-        return ballTrows.getFirst() + " " + SPARE_CHAR + FRAME_DELIMITER_CHAR;
+        return ballThrows[0] + " " + SPARE_CHAR + FRAME_DELIMITER_CHAR;
     }
 
     private String getClosedFrameString() {
-        return ballTrows.getFirst() + " " + ballTrows.getLast() + FRAME_DELIMITER_CHAR;
+        return ballThrows[0] + " " + ballThrows[1]+ FRAME_DELIMITER_CHAR;
     }
 
     private String getOpenFrameString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Object ballTrow : ballTrows) {
-            stringBuilder.append(String.format("%d ", (Integer) ballTrow));
+        for (int i = 0; i < size(); i++) {
+            stringBuilder.append(String.format("%d ", ballThrows[i]));
         }
         return stringBuilder.toString();
     }
@@ -138,15 +147,14 @@ public class Frame {
     }
 
     private String getTenthFrameString() {
-        Iterator iterator = ballTrows.iterator();
+
         StringBuilder stringBuilder = new StringBuilder();
         int sum = 0;
-        while(iterator.hasNext()) {
-            int count = (Integer) iterator.next();
-            sum += count;
+        for (int i = 0; i < size(); i++) {
+            sum += ballThrows[i];
             if (sum < KEGGLE_COUNT) {
-                stringBuilder.append(String.format("%d ", count));
-            } else if (count == KEGGLE_COUNT) {
+                stringBuilder.append(String.format("%d ", ballThrows[i]));
+            } else if (ballThrows[i] == KEGGLE_COUNT) {
                 stringBuilder.append(STRIKE_CHAR + " ");
                 sum = 0;
             } else if (sum == KEGGLE_COUNT) {

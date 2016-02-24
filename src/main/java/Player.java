@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Player {
     final public static int FRAMES_COUNT = 10;
@@ -70,7 +71,7 @@ public class Player {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder(getName() + "\n");
 
         for (Frame frame : frames) {
             stringBuilder.append(frame);
@@ -83,12 +84,12 @@ public class Player {
         stringBuilder.append("\n");
 
         stringBuilder.append("\n Количество фреймов: " + (activeFrameIndex + 1) +
-                "\n Количество очков: " + getScore() + "\n\n");
+                "\n Количество очков: " + getScore() + "\n");
         return stringBuilder.toString();
     }
 
     public String getName() {
-        return user.getName();
+        return (user == null) ? DEFAULT_USER_NAME : user.getName();
     }
 
     public void finishGame(int place) {
@@ -96,16 +97,15 @@ public class Player {
     }
 
     public static void main(String[] args) {
-        FrameValuesForTest[] testSet = FrameValuesForTest.testSetMax;
-        Player player = Player.build();
 
+        Player player = Player.build();
+        Scanner scanner = new Scanner(System.in);
         System.out.println(player);
-        for (FrameValuesForTest aTestSet : testSet) {
-            for (int j = 0; j < aTestSet.keggleCount.length; j++) {
-                player.throwBall(aTestSet.keggleCount[j]);
-                System.out.println(player);
-            }
+        while (!player.gameFinished()) {
+            player.throwBall(scanner.nextInt());
+            System.out.println(player);
         }
+
         System.out.println(player);
     }
 

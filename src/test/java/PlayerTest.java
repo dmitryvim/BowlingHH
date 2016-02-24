@@ -13,6 +13,7 @@ public class PlayerTest {
     @Before
     public void playerCreate() {
         user = Mockito.mock(Userable.class);
+        when(user.getName()).thenReturn("user");
         player = Player.build(user);
     }
 
@@ -71,82 +72,104 @@ public class PlayerTest {
     public void testGetName() {
         when(user.getName()).thenReturn("User 314");
         assertEquals("User 314", player.getName());
-
-        when(user.getName()).thenReturn("Dima");
-        assertEquals("Dima", player.getName());
     }
 
     @Test
-    public void testGetScoreInMoment1() throws Exception {
-        testGetScoreInMoment(FrameValuesForTest.testSet1);
+    public void testGetScoreInMomentLess10() throws Exception {
+        testGetScoreInMoment(FrameValuesForTest.testSetLess10InFrame);
     }
 
     @Test
-    public void testGetScoreInMoment2() throws Exception {
-        testGetScoreInMoment(FrameValuesForTest.testSet2);
+    public void testGetScoreInMomentSpare() throws Exception {
+        testGetScoreInMoment(FrameValuesForTest.testSetWithSpares);
     }
 
     @Test
-    public void testGetScoreInMoment3() throws Exception {
-        testGetScoreInMoment(FrameValuesForTest.testSet3);
+    public void testGetScoreInMomentStrike() throws Exception {
+        testGetScoreInMoment(FrameValuesForTest.testSetWithSparesAndStrinkes);
     }
 
     @Test
-    public void testGetScoreInThrows1() throws Exception {
-        testGetScoreInThrows(FrameValuesForTest.testSet1);
+    public void testGetScoreInThrowsLess10() throws Exception {
+        testGetScoreInThrows(FrameValuesForTest.testSetLess10InFrame);
     }
 
     @Test
-    public void testGetScoreInThrows2() throws Exception {
-        testGetScoreInThrows(FrameValuesForTest.testSet2);
+    public void testGetScoreInThrowsSpare() throws Exception {
+        testGetScoreInThrows(FrameValuesForTest.testSetWithSpares);
     }
 
     @Test
-    public void testGetScoreInThrows3() throws Exception {
-        testGetScoreInThrows(FrameValuesForTest.testSet3);
+    public void testGetScoreInThrowsStrike() throws Exception {
+        testGetScoreInThrows(FrameValuesForTest.testSetWithSparesAndStrinkes);
     }
 
     @Test
-    public void testGameFinish1() throws Exception {
-        testGameFinish(FrameValuesForTest.testSet1);
+    public void testGameFinishLess10() throws Exception {
+        testGameFinish(FrameValuesForTest.testSetLess10InFrame);
     }
 
     @Test
-    public void testGameFinish2() throws Exception {
-        testGameFinish(FrameValuesForTest.testSet2);
+    public void testGameFinishSpare() throws Exception {
+        testGameFinish(FrameValuesForTest.testSetWithSpares);
     }
 
     @Test
-    public void testGameFinish3() throws Exception {
-        testGameFinish(FrameValuesForTest.testSet3);
+    public void testGameFinishStrike() throws Exception {
+        testGameFinish(FrameValuesForTest.testSetWithSparesAndStrinkes);
     }
 
     @Test
-    public void testGetFrameNumber1() throws Exception {
-        testGetFrameNumber(FrameValuesForTest.testSet1);
+    public void testGetFrameNumberLess10() throws Exception {
+        testGetFrameNumber(FrameValuesForTest.testSetLess10InFrame);
     }
 
     @Test
-    public void testGetFrameNumber2() throws Exception {
-        testGetFrameNumber(FrameValuesForTest.testSet2);
+    public void testGetFrameNumberSpare() throws Exception {
+        testGetFrameNumber(FrameValuesForTest.testSetWithSpares);
     }
 
     @Test
-    public void testGetFrameNumber3() throws Exception {
-        testGetFrameNumber(FrameValuesForTest.testSet3);
+    public void testGetFrameNumberStrike() throws Exception {
+        testGetFrameNumber(FrameValuesForTest.testSetWithSparesAndStrinkes);
     }
 
-    ///
-
     @Test
-    public void testGetScoreAllStrike() {
+    public void testGetScoreInMomentAllStrike() {
         testGetScoreInMoment(FrameValuesForTest.testSetMax);
+    }
+
+    @Test
+    public void testGetScoreInThrowsAllStrike() {
         testGetScoreInThrows(FrameValuesForTest.testSetMax);
     }
 
     @Test
-    public void testGetScoreAllZero() {
+    public void testGetScoreInMomentAllZero() {
         testGetScoreInMoment(FrameValuesForTest.testSetZeros);
+    }
+
+    @Test
+    public void testGetScoreInThrowsAllZero() {
         testGetScoreInThrows(FrameValuesForTest.testSetZeros);
+    }
+
+    @Test
+    public void testToString() {
+        for (FrameValuesForTest aTestSet : FrameValuesForTest.testSetLess10InFrame) {
+            for (int j = 0; j < aTestSet.keggleCount.length; j++) {
+                player.throwBall(aTestSet.keggleCount[j]);
+            }
+        }
+
+        String expected = "user\n" +
+                "9 0|3 5|6 1|3 6|8 1|5 3|2 5|8 0|7 1|8 1 \n" +
+                "  9| 17| 24| 33| 42| 50| 57| 65| 73| 82|\n" +
+                "\n" +
+                " Количество фреймов: 10\n" +
+                " Количество очков: 82\n";
+        String result = player.toString();
+
+        assertEquals(expected, result);
     }
 }
